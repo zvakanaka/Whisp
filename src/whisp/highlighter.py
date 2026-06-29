@@ -162,6 +162,25 @@ class MarkdownHighlighter:
         finally:
             self.buffer.handler_unblock_by_func(self.on_changed)
 
+    def _cell_markup(self, text, bold=False):
+        """Convert a table cell's markdown to Pango markup, rendering [text](url) as links."""
+        parts = []
+        last = 0
+        for m in re.finditer(r'\[([^\]]+)\]\(([^)]+)\)', text):
+            plain = text[last:m.start()]
+            if plain:
+                parts.append(GLib.markup_escape_text(plain))
+            parts.append(
+                f'<a href="{GLib.markup_escape_text(m.group(2))}">'
+                f'{GLib.markup_escape_text(m.group(1))}</a>'
+            )
+            last = m.end()
+        plain = text[last:]
+        if plain:
+            parts.append(GLib.markup_escape_text(plain))
+        markup = ''.join(parts)
+        return f'<b>{markup}</b>' if bold else markup
+
     def _make_table_widget(self, table_text):
         SEP_RE = re.compile(r'^\|[-:| ]+\|?\s*$')
         header_cells = None
@@ -189,7 +208,7 @@ class MarkdownHighlighter:
 
         for col, cell in enumerate(header_cells):
             label = Gtk.Label()
-            label.set_markup(f"<b>{GLib.markup_escape_text(cell)}</b>")
+            label.set_markup(self._cell_markup(cell, bold=True))
             label.set_xalign(0)
             label.set_margin_start(8)
             label.set_margin_end(8)
@@ -205,7 +224,8 @@ class MarkdownHighlighter:
         for row_idx, row in enumerate(data_rows):
             for col in range(max_cols):
                 cell = row[col] if col < len(row) else ""
-                label = Gtk.Label(label=cell)
+                label = Gtk.Label()
+                label.set_markup(self._cell_markup(cell))
                 label.set_xalign(0)
                 label.set_margin_start(8)
                 label.set_margin_end(8)
