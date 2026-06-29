@@ -84,13 +84,6 @@ Whisp was heavily inspired by the core workflow and design philosophy of **Antin
 
 Whisp is free and open-source software licensed under the **GNU General Public License v3.0** (GPL-3.0). See the [LICENSE](LICENSE) file for more details.
 
-## Stargazers
+## Fork Notes
 
-Thank you to everyone who has starred the repository and supported the project!
-<a href="https://www.star-history.com/?repos=tanaybhomia%2FWhisp&type=timeline&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=tanaybhomia/Whisp&type=timeline&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=tanaybhomia/Whisp&type=timeline&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=tanaybhomia/Whisp&type=timeline&legend=top-left" />
- </picture>
-</a>
+This fork adds **image paste support**: press `Ctrl+V` with an image on the clipboard (e.g. a screenshot) to save it alongside the note and insert a Markdown reference. In WYSIWYG mode the image renders inline; in raw mode the `![](path)` syntax is shown as normal.
