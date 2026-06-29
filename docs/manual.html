@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Manual - Whisp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+    <link rel="shortcut icon" href="assets/icon.svg">
+    <link rel="icon" href="assets/icon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/icon.ico">
+    <!-- SEO / Social for manual -->
+    <meta name="description" content="Whisp User Manual — navigation, editor features, smart paste, themes, and shortcuts.">
+    <meta property="og:title" content="Whisp — User Manual" />
+    <meta property="og:description" content="Documentation for Whisp: navigation, editor features, smart paste, themes, and shortcuts." />
+    <meta property="og:image" content="assets/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image">
+</head>
+<body class="manual-page">
+
+    <div class="manual-layout">
+        <aside class="manual-sidebar">
+            <a href="index.html" class="back-link">← Back to Whisp</a>
+            
+            <div class="nav-group">
+                <h3>Basics</h3>
+                <a href="#nav-navigation">Navigation</a>
+                <a href="#nav-create">Creating Notes</a>
+                <a href="#nav-delete">Deleting Notes</a>
+                <a href="#nav-search">Search</a>
+            </div>
+
+            <div class="nav-group">
+                <h3>Editor</h3>
+                <a href="#nav-markdown">Markdown Formatting</a>
+                <a href="#nav-wysiwyg">WYSIWYG Mode</a>
+                <a href="#nav-lists">Smart Lists</a>
+                <a href="#nav-checkbox">Checkboxes</a>
+            </div>
+
+            <div class="nav-group">
+                <h3>Advanced</h3>
+                <a href="#nav-smartpaste">Smart Paste (URL)</a>
+                <a href="#nav-plainpaste">Plain Text Paste</a>
+            </div>
+
+            <div class="nav-group">
+                <h3>Smart Functions</h3>
+                <a href="#nav-date-time">Date & Time</a>
+                <a href="#nav-generators">Random & Dice</a>
+                <a href="#nav-text-commands">Text Commands</a>
+            </div>
+
+            <div class="nav-group">
+                <h3>Customization</h3>
+                <a href="#nav-themes">Paper Themes</a>
+                <a href="#nav-darkmode">Dark Mode</a>
+                <a href="#nav-typography">Typography</a>
+            </div>
+        </aside>
+
+        <main class="manual-content">
+            <header class="manual-header reveal">
+                <span class="version-badge">Updated for v1.3.3</span>
+                <h1>User Manual</h1>
+                <div class="intent-banner">
+                    <strong>Design Intent:</strong> Prioritize the present moment above organization or recall. Navigating Whisp should feel like dancing in your short-term memory.
+                </div>
+            </header>
+
+            <section id="nav-navigation" class="manual-section reveal">
+                <h2>Navigation</h2>
+                <ul>
+                    <li>Two-finger swipe left or right on your touchpad to smoothly transition between notes.</li>
+                    <li>Alternatively, click on the edges of the window or use the scroll wheel to navigate.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Swipe Left</kbd> or <kbd>Ctrl</kbd> + <kbd>[</kbd> Go to previous note
+                </div>
+                <div class="shortcut-box">
+                    <kbd>Swipe Right</kbd> or <kbd>Ctrl</kbd> + <kbd>]</kbd> Go to next note
+                </div>
+            </section>
+
+            <section id="nav-create" class="manual-section reveal">
+                <h2>Creating Notes</h2>
+                <ul>
+                    <li>Swiping past the latest (right-most) note will automatically spawn a fresh, blank note.</li>
+                    <li>You can also explicitly create a new note at any time using a keyboard shortcut.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>N</kbd> Create new note
+                </div>
+            </section>
+
+            <section id="nav-delete" class="manual-section reveal">
+                <h2>Deleting Notes</h2>
+                <ul>
+                    <li>Deleting a note removes it from the main view and moves it to a hidden <code>.trash</code> directory.</li>
+                    <li>If you accidentally delete a note, you can instantly undo it.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>Delete</kbd> Delete current note
+                </div>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>T</kbd> Undo last deletion
+                </div>
+            </section>
+
+            <section id="nav-search" class="manual-section reveal">
+                <h2>Search</h2>
+                <ul>
+                    <li>Instantly search through all your notes. Clicking a search result immediately jumps you to that note.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>F</kbd> Open global search
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="nav-markdown" class="manual-section reveal">
+                <h2>Markdown Formatting</h2>
+                <ul>
+                    <li>Whisp supports standard Markdown for fast formatting, but powers it up with smart keyboard toggles.</li>
+                    <li>Highlight text and press a shortcut to wrap it. Press it again to unwrap it.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>B</kbd> Toggle <strong>**bold**</strong>
+                </div>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>I</kbd> Toggle <em>*italic*</em>
+                </div>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>U</kbd> Toggle <u>&lt;u&gt;underline&lt;/u&gt;</u>
+                </div>
+            </section>
+
+            <section id="nav-wysiwyg" class="manual-section reveal">
+                <h2>WYSIWYG Mode</h2>
+                <ul>
+                    <li>Tired of looking at Markdown syntax? Toggle the live formatting view (the eye icon).</li>
+                    <li>All markdown symbols dynamically disappear when your cursor leaves the line, leaving behind beautiful rich text.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>E</kbd> Toggle WYSIWYG Mode
+                </div>
+            </section>
+
+            <section id="nav-lists" class="manual-section reveal">
+                <h2>Smart Lists</h2>
+                <ul>
+                    <li>Type <code>list</code> or <code>list: Custom Title</code> at the top of your note to activate List Mode.</li>
+                    <li>Pressing Enter will automatically spawn a new <code>☐</code> checkbox on the next line.</li>
+                    <li><strong>Smart Overwrite:</strong> Type <code>#</code> on an empty checkbox to instantly turn it into a heading.</li>
+                    <li><strong>Comments:</strong> Type <code>//</code> at the start of a list item to visually fade it out as a comment.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Tab</kbd> Indent list item
+                </div>
+                <div class="shortcut-box">
+                    <kbd>Shift</kbd> + <kbd>Tab</kbd> Outdent list item
+                </div>
+            </section>
+
+            <section id="nav-checkbox" class="manual-section reveal">
+                <h2>Checkboxes</h2>
+                <ul>
+                    <li>Whisp uses native unicode checkboxes (<code>☐</code> and <code>☑</code>) to keep your lists minimal and portable.</li>
+                    <li>Use the shortcut anywhere on a line to instantly insert or toggle a checkbox.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>S</kbd> Insert / Toggle checkbox
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="nav-smartpaste" class="manual-section reveal">
+                <h2>Smart Paste (URL)</h2>
+                <ul>
+                    <li>Dropping massive tracking URLs ruins the visual flow of a note.</li>
+                    <li>Use the Smart Paste shortcut when pasting a long URL. Whisp will analyze it locally, generate a clean, short visual label, and format it securely in Markdown.</li>
+                    <li>Turn on WYSIWYG Mode and the ugly Markdown syntax dynamically vanishes, leaving only the tiny link!</li>
+                    <li><em>100% offline and privacy-respecting. No external APIs used.</em></li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd> Smart URL Paste
+                </div>
+            </section>
+
+            <section id="nav-plainpaste" class="manual-section reveal">
+                <h2>Plain Text Paste</h2>
+                <ul>
+                    <li>Pasting text from the web often brings along unwanted markdown syntax.</li>
+                    <li>Use Plain Paste to aggressively strip all markdown symbols (headers, bold, italics, links, lists) before dropping the raw text into your note.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> Plain text paste
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="nav-date-time" class="manual-section reveal">
+                <h2>Date & Time Expansions</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Whisp includes a smart text expansion engine. Type a command starting with a colon (<code>::</code>) and hit Enter or Space to instantly expand it.</p>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::today</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Inserts the current date</div>
+                    <div class="command-example">Also available as: ::date</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::tomorrow</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Inserts tomorrow's date</div>
+                    <div class="command-example">Example: ::tomorrow</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::yesterday</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Inserts yesterday's date</div>
+                    <div class="command-example">Example: ::yesterday</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::today(n)</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Inserts a date with a specific offset in days</div>
+                    <div class="command-example">Example: ::today(5) inserts the date 5 days from now</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::now</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Inserts the current local time</div>
+                    <div class="command-example">Also available as: ::time</div>
+                </div>
+            </section>
+
+            <section id="nav-generators" class="manual-section reveal">
+                <h2>Random & Fun Generators</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Need a quick random string, a password, or a fun classic kaomoji? Use the built-in offline generator functions.</p>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::roll(20)</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Rolls a die with the specified number of sides</div>
+                    <div class="command-example">Also available as: ::roll(d20)</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::roll(4d6)</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Rolls multiple dice and automatically inserts their sum</div>
+                    <div class="command-example">Example: ::roll(4d6) rolls four 6-sided dice</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::random(str, n)</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Generates a random alphabetical string of length n</div>
+                    <div class="command-example">Example: ::random(str, 20)</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::random(int, n)</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Generates an n-digit random number</div>
+                    <div class="command-example">Example: ::random(int, 10)</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::random(alnum, n)</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Generates a secure n-character alphanumeric string</div>
+                    <div class="command-example">Example: ::random(alnum, 16)</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::password</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Generates a secure 16-character password with special characters</div>
+                    <div class="command-example">Example: ::password</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::uuid</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Generates a standard developer UUID string</div>
+                    <div class="command-example">Example: ::uuid</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::random_quote</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Insert a random inspirational quote about programming and design</div>
+                    <div class="command-example">Example: ::random_quote</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::random_wiki</span>
+                        <span class="command-badge">openURL</span>
+                    </div>
+                    <div class="command-desc">Open a random Wikipedia page instantly in your web browser</div>
+                    <div class="command-example">Example: ::random_wiki</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::magic8ball</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Ask Whisp a question and get a random classic Magic 8-Ball response</div>
+                    <div class="command-example">Example: ::magic8ball</div>
+                </div>
+                
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::lorem</span>
+                        <span class="command-badge">insert</span>
+                    </div>
+                    <div class="command-desc">Insert a standard Lorem Ipsum placeholder paragraph</div>
+                    <div class="command-example">Example: ::lorem</div>
+                </div>
+
+                <div class="tip-box" style="margin-top: 2rem;">
+                    <strong>Tip:</strong> You don't need to memorize these! A smart autocomplete dropdown appears when you type <code>::</code>.
+                </div>
+            </section>
+
+            <section id="nav-text-commands" class="manual-section reveal">
+                <h2>Text Commands</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Transform the entire document's text with various formatting options.</p>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::replace</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Find and replace text throughout the document</div>
+                    <div class="command-example">Example: ::replace(old, new)</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::append</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Add text to the end of every line in the document</div>
+                    <div class="command-example">Example: ::append(;) adds semicolon to each line</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::prepend</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Add text to the beginning of every line in the document</div>
+                    <div class="command-example">Example: ::prepend(- ) adds dash bullet to each line</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::uppercase</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Convert entire document to UPPERCASE</div>
+                    <div class="command-example">Example: ::uppercase</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::lowercase</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Convert entire document to lowercase</div>
+                    <div class="command-example">Example: ::lowercase</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::sentence_case</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Convert document to Sentence case</div>
+                    <div class="command-example">Example: ::sentence_case</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::title_case</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Convert Document To Title Case</div>
+                    <div class="command-example">Example: ::title_case</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::capitalize_first</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Capitalize the first letter of the document</div>
+                    <div class="command-example">Example: ::capitalize_first</div>
+                </div>
+
+                <div class="command-box">
+                    <div class="command-header">
+                        <span class="command-name">::remove_quotes</span>
+                        <span class="command-badge">replaceAll</span>
+                    </div>
+                    <div class="command-desc">Strip surrounding quotes from the entire document</div>
+                    <div class="command-example">Example: ::remove_quotes</div>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="nav-themes" class="manual-section reveal">
+                <h2>Paper Themes</h2>
+                <ul>
+                    <li>Customize the aesthetic of your notes by opening Preferences.</li>
+                    <li>Whisp supports three minimalist native backgrounds: <strong>Blank</strong>, <strong>Dotted</strong>, and <strong>Grid</strong>.</li>
+                </ul>
+            </section>
+
+            <section id="nav-darkmode" class="manual-section reveal">
+                <h2>Dark Mode</h2>
+                <ul>
+                    <li>Whisp is built natively for GNOME and will automatically adapt its UI, editor, and paper themes to match your system's global Dark Mode setting.</li>
+                    <li>The dotted and grid backgrounds dynamically invert to maintain high contrast and readability.</li>
+                </ul>
+            </section>
+
+            <section id="nav-typography" class="manual-section reveal">
+                <h2>Typography</h2>
+                <ul>
+                    <li>You have complete control over the editor font through the Preferences menu.</li>
+                    <li>Adjust the Line Spacing (1.0 to 2.0) to give your text more breathing room.</li>
+                </ul>
+                <div class="shortcut-box">
+                    <kbd>Ctrl</kbd> + <kbd>,</kbd> Open Preferences
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Simple active state observer for sidebar navigation
+        const sections = document.querySelectorAll('.manual-section');
+        const navLinks = document.querySelectorAll('.manual-sidebar a:not(.back-link)');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { rootMargin: '-20% 0px -80% 0px' });
+
+        sections.forEach(section => observer.observe(section));
+        
+        // Reveal Animations Observer
+        const revealOptions = {
+            root: null,
+            rootMargin: '0px 0px -20px 0px',
+            threshold: 0.1
+        };
+
+        const revealObserver = new IntersectionObserver((entries, revealObs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    revealObs.unobserve(entry.target);
+                }
+            });
+        }, revealOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Smooth scrolling
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+                history.pushState(null, null, targetId);
+            });
+        });
+    </script>
+</body>
+</html>

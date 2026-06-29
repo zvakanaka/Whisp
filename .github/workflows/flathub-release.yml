@@ -1,0 +1,63 @@
+name: Update Flathub Manifest
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Tag to release (e.g. v1.0.5)'
+        required: true
+
+jobs:
+  update-flathub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Determine Tag
+        id: get_tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "TAG=${{ github.event.inputs.version_tag }}" >> $GITHUB_ENV
+          else
+            echo "TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          fi
+
+      - name: Get Commit Hash for Tag
+        id: get_hash
+        run: |
+          git fetch --tags
+          COMMIT_HASH=$(git rev-list -n 1 $TAG)
+          echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
+          echo "Found hash $COMMIT_HASH for tag $TAG"
+
+      - name: Checkout Flathub Repo
+        uses: actions/checkout@v3
+        with:
+          repository: flathub/io.github.tanaybhomia.Whisp
+          token: ${{ secrets.FLATHUB_PAT }}
+          path: flathub-repo
+
+      - name: Update Manifest
+        run: |
+          cd flathub-repo
+          # Use sed to update the tag and commit in the YAML file
+          sed -i -E "s/tag: .*/tag: $TAG/" io.github.tanaybhomia.Whisp.yml
+          sed -i -E "s/commit: .*/commit: $COMMIT_HASH/" io.github.tanaybhomia.Whisp.yml
+          
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          
+          git add io.github.tanaybhomia.Whisp.yml
+          
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update manifest for $TAG"
+            git push
+          fi
