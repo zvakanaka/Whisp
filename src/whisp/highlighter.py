@@ -2,6 +2,11 @@ import re
 from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Pango
 from whisp.config import config
 
+_TABLE_RE = re.compile(
+    r'^\|[^\n]+\n\|[-:| ]+\|?\n(?:^\|[^\n]*\n?)*',
+    re.MULTILINE,
+)
+
 class MarkdownHighlighter:
     def __init__(self, buffer, textview=None, editor=None):
         self.buffer = buffer
@@ -15,6 +20,7 @@ class MarkdownHighlighter:
         self.timeout_id = 0
         self.last_cursor_line = -1
         self._image_anchors = []  # list of (TextMark, TextChildAnchor) tuples
+        self._table_anchors = []
 
     def create_tags(self):
         # Headings
@@ -50,6 +56,10 @@ class MarkdownHighlighter:
         
         # Invisible tag for WYSIWYG
         self.tag_invisible = self.buffer.create_tag("invisible", invisible=True)
+
+        # Table styling (raw mode)
+        self.tag_table_pipe = self.buffer.create_tag("table_pipe", foreground="#4c566a")
+        self.tag_table_sep  = self.buffer.create_tag("table_sep",  foreground="#4c566a", family="monospace")
 
         self.tag_search = self.buffer.create_tag("search_match", background="#f9f06b", foreground="#000000")
 
@@ -98,12 +108,12 @@ class MarkdownHighlighter:
             GLib.source_remove(self.timeout_id)
         self.timeout_id = GLib.idle_add(self.highlight)
 
-    def _cleanup_image_anchors(self):
-        if not self._image_anchors:
+    def _cleanup_anchors(self, anchor_list):
+        if not anchor_list:
             return
         self.buffer.handler_block_by_func(self.on_changed)
         try:
-            for mark, anchor in reversed(self._image_anchors):
+            for mark, anchor in reversed(anchor_list):
                 if not anchor.get_deleted():
                     it = self.buffer.get_iter_at_mark(mark)
                     end = it.copy()
@@ -113,7 +123,10 @@ class MarkdownHighlighter:
                     self.buffer.delete_mark(mark)
         finally:
             self.buffer.handler_unblock_by_func(self.on_changed)
-        self._image_anchors = []
+        del anchor_list[:]
+
+    def _cleanup_image_anchors(self):
+        self._cleanup_anchors(self._image_anchors)
 
     def _insert_image_anchors(self, image_matches):
         if not image_matches or self.textview is None:
@@ -149,9 +162,91 @@ class MarkdownHighlighter:
         finally:
             self.buffer.handler_unblock_by_func(self.on_changed)
 
+    def _make_table_widget(self, table_text):
+        SEP_RE = re.compile(r'^\|[-:| ]+\|?\s*$')
+        header_cells = None
+        data_rows = []
+        found_sep = False
+        for line in table_text.rstrip('\n').split('\n'):
+            line = line.strip()
+            if not line.startswith('|'):
+                continue
+            if SEP_RE.match(line):
+                found_sep = True
+                continue
+            cells = [c.strip() for c in line.strip('|').split('|')]
+            if header_cells is None and not found_sep:
+                header_cells = cells
+            else:
+                data_rows.append(cells)
+        if header_cells is None:
+            return None
+        max_cols = max(len(r) for r in [header_cells] + data_rows) if data_rows else len(header_cells)
+
+        grid = Gtk.Grid()
+        grid.set_row_spacing(0)
+        grid.set_column_spacing(0)
+
+        for col, cell in enumerate(header_cells):
+            label = Gtk.Label()
+            label.set_markup(f"<b>{GLib.markup_escape_text(cell)}</b>")
+            label.set_xalign(0)
+            label.set_margin_start(8)
+            label.set_margin_end(8)
+            label.set_margin_top(6)
+            label.set_margin_bottom(6)
+            grid.attach(label, col, 0, 1, 1)
+        for col in range(len(header_cells), max_cols):
+            grid.attach(Gtk.Label(label=""), col, 0, 1, 1)
+
+        sep = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        grid.attach(sep, 0, 1, max_cols, 1)
+
+        for row_idx, row in enumerate(data_rows):
+            for col in range(max_cols):
+                cell = row[col] if col < len(row) else ""
+                label = Gtk.Label(label=cell)
+                label.set_xalign(0)
+                label.set_margin_start(8)
+                label.set_margin_end(8)
+                label.set_margin_top(4)
+                label.set_margin_bottom(4)
+                grid.attach(label, col, row_idx + 2, 1, 1)
+
+        frame = Gtk.Frame()
+        frame.set_halign(Gtk.Align.START)
+        frame.set_margin_top(4)
+        frame.set_margin_bottom(4)
+        frame.set_child(grid)
+        frame.set_visible(True)
+        return frame
+
+    def _insert_table_anchors(self, table_matches):
+        if not table_matches or self.textview is None:
+            return
+        self.buffer.handler_block_by_func(self.on_changed)
+        try:
+            for m in reversed(table_matches):
+                it = self.buffer.get_iter_at_offset(m.start(0))
+                anchor = self.buffer.create_child_anchor(it)
+                mark_it = self.buffer.get_iter_at_offset(m.start(0))
+                mark = self.buffer.create_mark(None, mark_it, True)
+                self._table_anchors.append((mark, anchor))
+
+                text_start = self.buffer.get_iter_at_offset(m.start(0) + 1)
+                text_end   = self.buffer.get_iter_at_offset(m.end(0)   + 1)
+                self.buffer.apply_tag(self.tag_invisible, text_start, text_end)
+
+                widget = self._make_table_widget(m.group(0))
+                if widget:
+                    self.textview.add_child_at_anchor(widget, anchor)
+        finally:
+            self.buffer.handler_unblock_by_func(self.on_changed)
+
     def highlight(self):
         self.timeout_id = 0
         self._cleanup_image_anchors()
+        self._cleanup_anchors(self._table_anchors)
         start, end = self.buffer.get_bounds()
         text = self.buffer.get_text(start, end, True)
         
@@ -311,6 +406,30 @@ class MarkdownHighlighter:
             end_iter = self.buffer.get_iter_at_offset(m.end())
             self.buffer.apply_tag(self.tag_comment, start_iter, end_iter)
 
+        # Apply table formatting — inline widget in WYSIWYG, styled pipes in raw mode
+        table_matches_to_anchor = []
+        for m in _TABLE_RE.finditer(text):
+            table_start_line = self.buffer.get_iter_at_offset(m.start(0)).get_line()
+            # end(0) may point at start of next line; step back 1 char to get last table line
+            end_check_offset = max(m.start(0), m.end(0) - 1)
+            table_end_line = self.buffer.get_iter_at_offset(end_check_offset).get_line()
+            cursor_on_table = table_start_line <= cursor_iter.get_line() <= table_end_line
+
+            if wysiwyg and not cursor_on_table:
+                table_matches_to_anchor.append(m)
+            else:
+                # Style pipe chars muted and separator row distinctly
+                table_text = m.group(0)
+                for pipe_m in re.finditer(r'\|', table_text):
+                    pi = self.buffer.get_iter_at_offset(m.start(0) + pipe_m.start())
+                    pe = self.buffer.get_iter_at_offset(m.start(0) + pipe_m.end())
+                    self.buffer.apply_tag(self.tag_table_pipe, pi, pe)
+                sep_m = re.search(r'^(\|[-:| ]+\|?\n?)$', table_text, re.MULTILINE)
+                if sep_m:
+                    si = self.buffer.get_iter_at_offset(m.start(0) + sep_m.start())
+                    se = self.buffer.get_iter_at_offset(m.start(0) + sep_m.end())
+                    self.buffer.apply_tag(self.tag_table_sep, si, se)
+
         # Apply image formatting for ![alt](path) — hide syntax in WYSIWYG, show inline widget
         image_matches_to_anchor = []
         for m in re.finditer(r'!\[([^\]]*)\]\(([^)]+\.(?:png|jpg|jpeg|gif|webp))\)', text):
@@ -324,5 +443,7 @@ class MarkdownHighlighter:
 
         if image_matches_to_anchor:
             self._insert_image_anchors(image_matches_to_anchor)
+        if table_matches_to_anchor:
+            self._insert_table_anchors(table_matches_to_anchor)
 
         return False
