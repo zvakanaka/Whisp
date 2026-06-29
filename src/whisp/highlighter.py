@@ -1,5 +1,5 @@
 import re
-from gi.repository import GLib, Pango
+from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Pango
 from whisp.config import config
 
 class MarkdownHighlighter:
@@ -14,6 +14,7 @@ class MarkdownHighlighter:
         # Timeout ID for debouncing
         self.timeout_id = 0
         self.last_cursor_line = -1
+        self._image_anchors = []  # list of (TextMark, TextChildAnchor) tuples
 
     def create_tags(self):
         # Headings
@@ -97,8 +98,60 @@ class MarkdownHighlighter:
             GLib.source_remove(self.timeout_id)
         self.timeout_id = GLib.idle_add(self.highlight)
 
+    def _cleanup_image_anchors(self):
+        if not self._image_anchors:
+            return
+        self.buffer.handler_block_by_func(self.on_changed)
+        try:
+            for mark, anchor in reversed(self._image_anchors):
+                if not anchor.get_deleted():
+                    it = self.buffer.get_iter_at_mark(mark)
+                    end = it.copy()
+                    end.forward_char()
+                    self.buffer.delete(it, end)
+                if not mark.get_deleted():
+                    self.buffer.delete_mark(mark)
+        finally:
+            self.buffer.handler_unblock_by_func(self.on_changed)
+        self._image_anchors = []
+
+    def _insert_image_anchors(self, image_matches):
+        if not image_matches or self.textview is None:
+            return
+        self.buffer.handler_block_by_func(self.on_changed)
+        try:
+            for m, full_path in reversed(image_matches):
+                it = self.buffer.get_iter_at_offset(m.start(0))
+                anchor = self.buffer.create_child_anchor(it)
+                mark_it = self.buffer.get_iter_at_offset(m.start(0))
+                mark = self.buffer.create_mark(None, mark_it, True)
+                self._image_anchors.append((mark, anchor))
+
+                # Apply invisible tag to the text AFTER the anchor (+1 for the anchor char).
+                # Done here (not in highlight()) so the range is correct post-insertion.
+                text_start = self.buffer.get_iter_at_offset(m.start(0) + 1)
+                text_end = self.buffer.get_iter_at_offset(m.end(0) + 1)
+                self.buffer.apply_tag(self.tag_invisible, text_start, text_end)
+
+                try:
+                    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                        full_path, 400, -1, True
+                    )
+                    texture = Gdk.Texture.new_for_pixbuf(pixbuf)
+                    picture = Gtk.Picture.new_for_paintable(texture)
+                    picture.set_size_request(pixbuf.get_width(), pixbuf.get_height())
+                except Exception:
+                    picture = Gtk.Picture.new()
+                    picture.set_size_request(200, 100)
+                picture.set_content_fit(Gtk.ContentFit.CONTAIN)
+                picture.set_visible(True)
+                self.textview.add_child_at_anchor(picture, anchor)
+        finally:
+            self.buffer.handler_unblock_by_func(self.on_changed)
+
     def highlight(self):
         self.timeout_id = 0
+        self._cleanup_image_anchors()
         start, end = self.buffer.get_bounds()
         text = self.buffer.get_text(start, end, True)
         
@@ -204,8 +257,8 @@ class MarkdownHighlighter:
             if m.group(2) == '☑':
                 self.buffer.apply_tag(self.tag_checkbox_checked, box_start, line_end)
 
-        # Apply link formatting for Markdown links [text](url)
-        for m in re.finditer(r'\[(.*?)\]\((.*?)\)', text):
+        # Apply link formatting for Markdown links [text](url) — exclude image syntax ![alt](url)
+        for m in re.finditer(r'(?<!!)\[(.*?)\]\((.*?)\)', text):
             text_start = self.buffer.get_iter_at_offset(m.start(1))
             text_end = self.buffer.get_iter_at_offset(m.end(1))
             self.buffer.apply_tag(self.tag_link, text_start, text_end)
@@ -258,6 +311,18 @@ class MarkdownHighlighter:
             end_iter = self.buffer.get_iter_at_offset(m.end())
             self.buffer.apply_tag(self.tag_comment, start_iter, end_iter)
 
+        # Apply image formatting for ![alt](path) — hide syntax in WYSIWYG, show inline widget
+        image_matches_to_anchor = []
+        for m in re.finditer(r'!\[([^\]]*)\]\(([^)]+\.(?:png|jpg|jpeg|gif|webp))\)', text):
+            if wysiwyg and not (m.start(0) <= cursor_offset <= m.end(0)):
+                if self.editor and hasattr(self.editor, 'file_path'):
+                    full_path = str(self.editor.file_path.parent / m.group(2))
+                    image_matches_to_anchor.append((m, full_path))
+
+        # highlight_search runs before anchor insertion so its offset calculations stay clean
         self.highlight_search()
+
+        if image_matches_to_anchor:
+            self._insert_image_anchors(image_matches_to_anchor)
 
         return False

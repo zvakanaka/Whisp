@@ -1238,18 +1238,37 @@ class NoteEditor(Gtk.Overlay):
     def on_smart_paste_read(self, clipboard, result):
         try:
             text = clipboard.read_text_finish(result)
-            if text:
-                url = text.strip()
-                if re.match(r'^https?://[^\s]+$', url) and len(url) > 30:
-                    display_url = url.replace("https://", "").replace("http://", "").replace("www.", "")
-                    if len(display_url) > 25:
-                        display_url = display_url[:25] + "..."
-                    markdown_link = f"[{display_url}]({url})"
-                    GLib.idle_add(lambda: self.buffer.insert_at_cursor(markdown_link) or False)
-                else:
-                    GLib.idle_add(lambda: self.buffer.insert_at_cursor(text) or False)
         except GLib.Error:
-            pass
+            text = None
+
+        if text:
+            url = text.strip()
+            if re.match(r'^https?://[^\s]+$', url) and len(url) > 30:
+                display_url = url.replace("https://", "").replace("http://", "").replace("www.", "")
+                if len(display_url) > 25:
+                    display_url = display_url[:25] + "..."
+                markdown_link = f"[{display_url}]({url})"
+                GLib.idle_add(lambda: self.buffer.insert_at_cursor(markdown_link) or False)
+            else:
+                GLib.idle_add(lambda: self.buffer.insert_at_cursor(text) or False)
+        else:
+            clipboard.read_texture_async(None, self.on_smart_paste_image_read)
+
+    def on_smart_paste_image_read(self, clipboard, result):
+        try:
+            texture = clipboard.read_texture_finish(result)
+        except GLib.Error:
+            return
+        if texture is None:
+            return
+        note_stem = self.file_path.stem
+        assets_dir = self.file_path.parent / note_stem / "assets"
+        assets_dir.mkdir(parents=True, exist_ok=True)
+        image_name = f"{uuid.uuid4().hex}.png"
+        if not texture.save_to_png(str(assets_dir / image_name)):
+            return
+        markdown = f"![](./{note_stem}/assets/{image_name})"
+        GLib.idle_add(lambda: self.buffer.insert_at_cursor(markdown) or False)
 
     def paste_plain_text(self):
         clipboard = self.textview.get_clipboard()

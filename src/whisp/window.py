@@ -31,152 +31,157 @@ class ThemeSnippet(Gtk.ToggleButton):
 
 shortcuts_xml = """
 <interface>
-  <object class="AdwShortcutsDialog" id="shortcuts_dialog">
+  <object class="GtkShortcutsWindow" id="shortcuts_dialog">
+    <property name="modal">1</property>
     <child>
-      <object class="AdwShortcutsSection">
-        <property name="title">General</property>
+      <object class="GtkShortcutsSection">
         <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Create New Note</property>
-            <property name="accelerator">&lt;Primary&gt;n</property>
+          <object class="GtkShortcutsGroup">
+            <property name="title">General</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Create New Note</property>
+                <property name="accelerator">&lt;Primary&gt;n</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Delete Note</property>
+                <property name="accelerator">&lt;Primary&gt;Delete</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Undo Delete</property>
+                <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;t</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Previous Note</property>
+                <property name="accelerator">&lt;Primary&gt;bracketleft</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Next Note</property>
+                <property name="accelerator">&lt;Primary&gt;bracketright</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">First Note</property>
+                <property name="accelerator">&lt;Alt&gt;f</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Last Note</property>
+                <property name="accelerator">&lt;Alt&gt;l</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Pin Note</property>
+                <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;p</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Move Note to Front</property>
+                <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;m</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Preferences</property>
+                <property name="accelerator">&lt;Primary&gt;comma</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Quit</property>
+                <property name="accelerator">&lt;Primary&gt;q</property>
+              </object>
+            </child>
           </object>
         </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Delete Note</property>
-            <property name="accelerator">&lt;Primary&gt;Delete</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Undo Delete</property>
-            <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;t</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Previous Note</property>
-            <property name="accelerator">&lt;Primary&gt;bracketleft</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Next Note</property>
-            <property name="accelerator">&lt;Primary&gt;bracketright</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">First Note</property>
-            <property name="accelerator">&lt;Alt&gt;f</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Last Note</property>
-            <property name="accelerator">&lt;Alt&gt;l</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Pin Note</property>
-            <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;p</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Move Note to Front</property>
-            <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;m</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Preferences</property>
-            <property name="accelerator">&lt;Primary&gt;comma</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Quit</property>
-            <property name="accelerator">&lt;Primary&gt;q</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    
-    <child>
-      <object class="AdwShortcutsSection">
-        <property name="title">Editor</property>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Search Notes</property>
-            <property name="accelerator">&lt;Primary&gt;f</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Toggle Checkbox</property>
-            <property name="accelerator">&lt;Primary&gt;s</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Paste Plain Text</property>
-            <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;v</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Copy Entire Note</property>
-            <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;c</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Shorten Selected URL</property>
-            <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;l</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Bold Text</property>
-            <property name="accelerator">&lt;Primary&gt;b</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Italic Text</property>
-            <property name="accelerator">&lt;Primary&gt;i</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Underline Text</property>
-            <property name="accelerator">&lt;Primary&gt;u</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Strikethrough Text</property>
-            <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;s</property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Insert Emoji</property>
-            <property name="accelerator">&lt;Primary&gt;period</property>
-          </object>
-        </child>
-      </object>
-    </child>
 
-    <child>
-      <object class="AdwShortcutsSection">
-        <property name="title">Modes</property>
         <child>
-          <object class="AdwShortcutsItem">
-            <property name="title">Toggle WYSIWYG Mode</property>
-            <property name="accelerator">&lt;Primary&gt;e</property>
+          <object class="GtkShortcutsGroup">
+            <property name="title">Editor</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Search Notes</property>
+                <property name="accelerator">&lt;Primary&gt;f</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Toggle Checkbox</property>
+                <property name="accelerator">&lt;Primary&gt;s</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Paste Plain Text</property>
+                <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;v</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Copy Entire Note</property>
+                <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;c</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Shorten Selected URL</property>
+                <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;l</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Bold Text</property>
+                <property name="accelerator">&lt;Primary&gt;b</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Italic Text</property>
+                <property name="accelerator">&lt;Primary&gt;i</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Underline Text</property>
+                <property name="accelerator">&lt;Primary&gt;u</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Strikethrough Text</property>
+                <property name="accelerator">&lt;Primary&gt;&lt;Shift&gt;s</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Insert Emoji</property>
+                <property name="accelerator">&lt;Primary&gt;period</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title">Modes</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title">Toggle WYSIWYG Mode</property>
+                <property name="accelerator">&lt;Primary&gt;e</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
@@ -764,7 +769,8 @@ class WhispWindow(Adw.ApplicationWindow):
     def on_show_shortcuts(self, action, param):
         builder = Gtk.Builder.new_from_string(shortcuts_xml, -1)
         dialog = builder.get_object("shortcuts_dialog")
-        dialog.present(self)
+        dialog.set_transient_for(self)
+        dialog.present()
 
     def save_metadata(self):
         import json
@@ -1058,6 +1064,13 @@ class WhispWindow(Adw.ApplicationWindow):
         
         if trash_path.exists():
             shutil.move(str(trash_path), str(data_path))
+
+            # Also restore the per-note assets subfolder if it was trashed
+            note_stem = self.last_deleted_file.replace('.md', '')
+            assets_trash = TRASH_DIR / note_stem
+            if assets_trash.exists():
+                shutil.move(str(assets_trash), str(DATA_DIR / note_stem))
+
             idx = getattr(self, 'last_deleted_index', None)
             self.add_note(data_path, grab_focus=True, index=idx)
             self.last_deleted_file = None
@@ -1124,6 +1137,15 @@ class WhispWindow(Adw.ApplicationWindow):
                 # Try to move to trash first
                 shutil.move(str(editor.file_path), str(dest_path))
                 self.last_deleted_file = editor.file_path.name
+
+                # Also move the per-note assets subfolder if it exists
+                note_stem = editor.file_path.stem
+                assets_src = editor.file_path.parent / note_stem
+                if assets_src.exists():
+                    assets_dst = TRASH_DIR / note_stem
+                    if assets_dst.exists():
+                        shutil.rmtree(str(assets_dst))
+                    shutil.move(str(assets_src), str(assets_dst))
             except Exception as e:
                 # Fallback
                 try:
