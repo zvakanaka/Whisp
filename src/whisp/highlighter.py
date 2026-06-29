@@ -166,7 +166,7 @@ class MarkdownHighlighter:
         """Convert a table cell's markdown to Pango markup, rendering [text](url) as links."""
         parts = []
         last = 0
-        for m in re.finditer(r'\[([^\]]+)\]\(([^)]+)\)', text):
+        for m in re.finditer(r'\[(.+?)\]\(([^)]+)\)', text):
             plain = text[last:m.start()]
             if plain:
                 parts.append(GLib.markup_escape_text(plain))
